@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web NFC Sample</title>
+    <title>Contoh Web NFC</title>
     <style>
       /* Gaya CSS sederhana untuk memperbaiki tampilan */
       body {
@@ -19,47 +19,47 @@
     </style>
 </head>
 <body>
-    <button id="scanButton">Scan</button>
-    <button id="writeButton">Write</button>
+    <button id="scanButton">Pindai</button>
+    <button id="writeButton">Tulis</button>
 
-    <h3>Live Output</h3>
+    <h3>Hasil Langsung</h3>
     <div id="output">
-        <div id="status">Web NFC is not available. Please make sure the "Experimental Web Platform features" flag is enabled on Android.</div>
+        <div id="status">Web NFC tidak tersedia. Pastikan flag "Fitur Platform Web Eksperimental" diaktifkan di Android.</div>
         <pre id="log"></pre>
     </div>
 
     <script>
-        // Function to handle logging
+        // Fungsi untuk menangani pencatatan log
         function log(message) {
             const logElement = document.getElementById('log');
             logElement.textContent += message + '\n';
         }
 
-        // Check if Web NFC API is supported
+        // Periksa apakah Web NFC API didukung
         if ('NDEFReader' in window) {
-            document.getElementById('status').textContent = 'Web NFC is available!';
+            document.getElementById('status').textContent = 'Web NFC tersedia!';
         } else {
-            document.getElementById('status').textContent = 'Web NFC is not available.';
+            document.getElementById('status').textContent = 'Web NFC tidak tersedia.';
         }
 
-        // Scan NFC Button Event
+        // Event untuk tombol Pindai NFC
         document.getElementById('scanButton').addEventListener('click', async () => {
-            log('User clicked scan button');
+            log('Pengguna mengklik tombol pindai');
 
             try {
                 const ndef = new NDEFReader();
                 await ndef.scan();
-                log('Scan started');
+                log('Pemindaian dimulai');
 
                 ndef.addEventListener('readingerror', () => {
-                    log('Argh! Cannot read data from the NFC tag. Try another one?');
+                    log('Argh! Tidak dapat membaca data dari tag NFC. Coba tag lain?');
                 });
 
                 ndef.addEventListener('reading', ({ message, serialNumber }) => {
-                    log(`Serial Number: ${serialNumber}`);
-                    log(`Records: (${message.records.length})`);
+                    log(`Nomor Seri: ${serialNumber}`);
+                    log(`Rekaman: (${message.records.length})`);
                     message.records.forEach(record => {
-                        log(`Record: ${record.recordType}, Data: ${new TextDecoder().decode(record.data)}`);
+                        log(`Rekaman: ${record.recordType}, Data: ${new TextDecoder().decode(record.data)}`);
                     });
                 });
             } catch (error) {
@@ -67,14 +67,14 @@
             }
         });
 
-        // Write NFC Button Event
+        // Event untuk tombol Tulis NFC
         document.getElementById('writeButton').addEventListener('click', async () => {
-            log('User clicked write button');
+            log('Pengguna mengklik tombol tulis');
 
             try {
                 const ndef = new NDEFReader();
-                await ndef.write({ records: [{ recordType: 'text', data: 'Hello world!' }] });
-                log('Message written');
+                await ndef.write({ records: [{ recordType: 'text', data: 'Halo dunia!' }] });
+                log('Pesan tertulis');
             } catch (error) {
                 log('Argh! ' + error);
             }
