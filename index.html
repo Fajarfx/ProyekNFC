@@ -95,6 +95,29 @@
         ];
         log('Jenis tag NFC yang dapat dibaca:');
         supportedTags.forEach(tag => log(`- ${tag}`));
+
+        document.getElementById('scanButton').addEventListener('click', async () => {
+    try {
+        const ndef = new NDEFReader();
+        await ndef.scan();
+        console.log('Pemindaian dimulai');
+
+        ndef.addEventListener('readingerror', () => {
+            console.log('Argh! Tidak dapat membaca data dari tag NFC. Coba tag lain?');
+        });
+
+        ndef.addEventListener('reading', ({ message, serialNumber }) => {
+            console.log(`Nomor Seri: ${serialNumber}`);
+            console.log(`Rekaman: (${message.records.length})`);
+            message.records.forEach(record => {
+                console.log(`Tipe Rekaman: ${record.recordType}, Data: ${new TextDecoder().decode(record.data)}`);
+            });
+        });
+    } catch (error) {
+        console.log('Argh! ' + error);
+    }
+});
+
     </script>
 </body>
 </html>
