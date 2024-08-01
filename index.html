@@ -53,6 +53,7 @@
 
                 ndef.addEventListener('readingerror', () => {
                     log('Argh! Tidak dapat membaca data dari tag NFC. Coba tag lain?');
+                    document.getElementById('status').textContent = 'Gagal membaca tag NFC. Coba tag lain?';
                 });
 
                 ndef.addEventListener('reading', ({ message, serialNumber }) => {
@@ -61,9 +62,11 @@
                     message.records.forEach(record => {
                         log(`Rekaman: ${record.recordType}, Data: ${new TextDecoder().decode(record.data)}`);
                     });
+                    document.getElementById('status').textContent = 'Berhasil membaca tag NFC.';
                 });
             } catch (error) {
                 log('Argh! ' + error);
+                document.getElementById('status').textContent = 'Gagal memulai pemindaian NFC: ' + error;
             }
         });
 
@@ -75,10 +78,23 @@
                 const ndef = new NDEFReader();
                 await ndef.write({ records: [{ recordType: 'text', data: 'Halo dunia!' }] });
                 log('Pesan tertulis');
+                document.getElementById('status').textContent = 'Pesan berhasil ditulis ke tag NFC.';
             } catch (error) {
                 log('Argh! ' + error);
+                document.getElementById('status').textContent = 'Gagal menulis ke tag NFC: ' + error;
             }
         });
+
+        // Menampilkan jenis tag NFC yang dapat dibaca
+        const supportedTags = [
+            'NFC Forum Type 1',
+            'NFC Forum Type 2',
+            'NFC Forum Type 3',
+            'NFC Forum Type 4',
+            'NFC Forum Type 5'
+        ];
+        log('Jenis tag NFC yang dapat dibaca:');
+        supportedTags.forEach(tag => log(`- ${tag}`));
     </script>
 </body>
 </html>
